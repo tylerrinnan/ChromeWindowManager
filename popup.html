@@ -1,0 +1,56 @@
+<!doctype html>
+<!--
+ This page is shown when the extension button is clicked, because the
+ "browser_action" field in manifest.json contains the "default_popup" key with
+ value "popup.html".
+ -->
+<html>
+  <head>
+    <title>Productivity Resize</title>
+	<style>
+	  #selector {
+		width: 130px;
+	  }
+	
+ 	  #selector h1{ 
+		font-size: 14px;
+		font-style: bold;
+	  }
+	  
+	  #selector div {
+		margin-bottom: 10px;
+	  }
+	  
+	  #selector input {
+		width: 60px;
+	  }
+    </style>
+
+    <!--
+      - JavaScript and HTML must be in separate files: see our Content Security
+      - Policy documentation[1] for details and explanation.
+      -
+      - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
+     -->
+    <script src="jquery-1.11.3.min.js"></script>
+	<script src="popup.js"></script>
+	
+  </head>
+  <body>
+    <div id="selector">
+		<h1>Configuration</h1>
+		<div>
+			<button type="button" id="left">Left</button>
+			<button type="button" id="right">Right</button>
+		</div>
+		<div>
+			<span>Enter Width to Increase:</span>
+			<div>
+				<input type="text"></input>
+				<button type="button" id='update'>Update</button>
+			</div>
+		</div>
+	</div>
+  </body>
+</html>
+
