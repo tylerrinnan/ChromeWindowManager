@@ -6,87 +6,75 @@ function renderSelectors(statusText) {
 
 var currTabs;
 var currWindow;
-var stop = 50;
+var maxWidth = 9999; // chrome will resize to its maximum limit, therefore 9999 is fine
+var minWidth = 0; // chrome will resize to its minimum limit, therefore 0 is fine
 var counter = 0;
 
-var resize = function (window, sizeToResizeBy) {
-	if (counter < stop) {
-		counter++;
+// var resize = function (window, resizeBy) {
+// 	if (counter < stop) {
+// 		counter++;
+// 		chrome.windows.update(window.id, {
+// 			width : window.width + resizeBy,
+// 			height : window.height
+// 		}, function (win) {
+// 			resize(win, sizeToResizeBy);
+// 		});
+// 		//console.log(counter);
+// 	} else {
+// 		//console.log('made it out of the loop');
+// 	}
+// };
+
+var resize = function (window, resizeBy, minOrMax) {
+		var width = minOrMax === 0 ? minWidth : maxWidth;
 		chrome.windows.update(window.id, {
-			width : window.width + sizeToResizeBy,
+			width : width,
 			height : window.height
 		}, function (win) {
-			resize(win, sizeToResizeBy);
-		});
-		//console.log(counter);
-	} else {
-		//console.log('made it out of the loop');
-	}
+			//do nothing here.
+		})
 };
 
 var bindEventHandlers = function () {
-	$('#left').bind('click', function () {
-		locationSelectorHandler(0)
+	$('#orientation button').bind('click', function (event) {
+		designateOrienation(event);
 	});
-	$('#right').bind('click', function () {
-		locationSelectorHandler(1)
+
+	$('#update').on('click', {value: this}, function (event) {
+		updateResizeHandler();
 	});
 };
 
 var updateResizeHandler = function () {
-	var $update = $('#update');
-	
-	if($update === []){
+	var $resizeInput = $('#resizeInput');
+
+	if($resizeInput === []){
 		console.log('updateResizeHandler, update textbox not found');
 		return;
 	}
-	
-	var val = $update.val();
-	$update.val('');
-	
+
+	//Grab the value to store, and clear out the textbox
+	//TODO: Move this out into it's own function
+	var val = $resizeInput.val();
+	$resizeInput.val('');
+
 	if(val){
 		saveToStorage()
-	}
-	
-	
-	
+	};
 };
 
-var locationSelectorHandler = function (position) {
-	var storage = chrome.storage.sync;
-	if (storage) {
-		if (position !== undefined && position !== null) {
-			chrome.windows.getCurrent(function (win) {
-				var orientation;
-				switch (position) {
-				case 0:
-					orientation = 'left';
-					break;
-				case 1:
-					orientation = 'right'
-						break;
-				default:
-					console.log('locationSelectorHandler, unrecognized position value: ' + position);
-					return;
-				}
-				var json = {};
-				json['pr_' + win.id] = {
-					"orientation" : orientation,
-					"oWidth" : win.width,
-					"oHeight" : win.Height
-				};
+var designateOrienation = function (event) {
+		chrome.windows.getCurrent(function (win) {
+			var json = {};
+			json['pr_' + win.id] = {
+				"orientation" : event.toElement.dataset.orientation,
+			};
 
-				saveToStorage(json, function () {
-					//do nothing with callback.
-					//there is a listener bound to storage that will notify the user when storage has been modified.
-				});
+			saveToStorage(json, function () {
+				//do nothing with callback.
+				//there is a listener bound to storage that will notify the user when storage has been modified.
 			});
-		} else {
-			console.log('locationSelectorHandler, passed falsy parm: ' + position);
-		}
-	} else {
-		console.log('locationSelectorHandler, chrome storage not available, value: ' + storage);
-	}
+		});
 };
 
 // Takes an object in the following format {'key': 'value'}
@@ -105,11 +93,9 @@ var getFromStorage = function(key){
 		console.log('getFromStorage, invalid key: ' + key);
 		return;
 	}
-	
-	$.when(storage.get(key, function(obj){
-		return obj;
-	})).done(function(value){
-		alert(value);
+
+	storage.get(key, function(obj){
+		console.log(obj["pr_1"].orientation);
 	});
 }
 
@@ -122,7 +108,7 @@ chrome.storage.onChanged.addListener(function (changes, namespace) {
 			 namespace,
 			 storageChange.oldValue,
 			 storageChange.newValue);
-	 }	
+	 }
 });
 
 var getChromeStorage = function(){
@@ -136,6 +122,3 @@ var getChromeStorage = function(){
 document.addEventListener('DOMContentLoaded', function () {
 	bindEventHandlers();
 });
-
-
-
