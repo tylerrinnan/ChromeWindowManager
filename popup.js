@@ -1,5 +1,6 @@
 var left = 'left';
 var right = 'right';
+var CWM = 'CWM';
 var leftId;
 var rightId;
 var maxWidth = 9999; // chrome will resize to its maximum limit
@@ -28,18 +29,39 @@ var bindEventHandlers = function () {
 	})
 };
 
+/*
+Designates the window orientation 'left' or 'right' depending on user input.
+*/
 var designateOrienation = function (event) {
 		chrome.windows.getCurrent(function (win) {
-			var orientation = event.toElement.dataset.orientation
-			if(orientation == left){
-				leftId = win.id;
-			}else if(orientation == right){
-				rightId = win.id;
-			}else{
-				//tampered with data values
-				console.log('messing with data values will cause CWM to work incorrectly...');
-				return;
-			}
+			getFromStorage(CWM, function(json){
+				var cwm = json;
+
+				// Initializes object if storage does not have key
+				if(!cwm[CWM]){
+					cwm[CWM] = {
+						leftId: null,
+						rightId: null
+					};
+				}
+
+				// Set the new window orientation before updating
+				// If id is used for both 'right' and 'left', disable old destigation by assigning null
+				if(event.toElement.dataset.orientation === left){
+					cwm[CWM].leftId = win.id
+
+					if(cwm[CWM].leftId === cwm[CWM].rightId){
+						cwm[CWM].rightId = null;
+					}
+				}else{
+					cwm[CWM].rightId = win.id;
+
+					if(cwm[CWM].rightId === cwm[CWM].leftId){
+						cwm[CWM].leftId = null;
+					}
+				}
+				saveToStorage(cwm);
+			});
 		});
 };
 
@@ -57,56 +79,45 @@ chrome.windows.onFocusChanged.addListener(function(windowId){
 	resize(windowId);
 });
 
-// var json = {};
-// json['pr_' + win.id] = {
-// 	"orientation" : event.toElement.dataset.orientation,
-// };
-//
-// saveToStorage(json, function () {
-// 	//do nothing with callback.
-// 	//there is a listener bound to storage that will notify the user when storage has been modified.
-// });
+// Takes an object in the following format {'key': 'value'}
+var saveToStorage = function(obj, callback){
+	var storage = getChromeStorage();
+	if(obj){
+		storage.set(obj, callback);
+	}else{
+		console.log('saveToStorage, falsy parm passed: ' + obj);
+	}
+}
 
-// // Takes an object in the following format {'key': 'value'}
-// var saveToStorage = function(obj, callback){
-// 	var storage = getChromeStorage();
-// 	if(obj){
-// 		storage.set(obj, callback);
-// 	}else{
-// 		console.log('saveToStorage, falsy parm passed: ' + obj);
-// 	}
-// }
-//
-// var getFromStorage = function(key){
-// 	var storage = getChromeStorage();
-// 	if(!key || key.length <= 0){
-// 		console.log('getFromStorage, invalid key: ' + key);
-// 		return;
-// 	}
-//
-// 	storage.get(key, function(obj){
-// 		console.log(obj["pr_1"].orientation);
-// 	});
-// };
-//
-// var getChromeStorage = function(){
-// 	if(chrome && chrome.storage && chrome.storage.sync){
-// 		return chrome.storage.sync;
-// 	}else{
-// 		console.log('getChromeStorage, chrome storage not available. Check manifest.json');
-// 	}
-// }
+//callback should have parm of items (which is response from storage)
+var getFromStorage = function(key, callback){
+	var storage = getChromeStorage();
+	if(!key || key.length <= 0){
+		console.log('getFromStorage, invalid key: ' + key);
+		return;
+	}
 
+	storage.get(key, callback);
+};
 
+var getChromeStorage = function(){
+	if(chrome && chrome.storage && chrome.storage.sync){
+		return chrome.storage.sync;
+	}else{
+		console.log('getChromeStorage, chrome storage not available. Check manifest.json');
+	}
+}
 
-// chrome.storage.onChanged.addListener(function (changes, namespace) {
-// 	 for (key in changes) {
-// 		 var storageChange = changes[key];
-// 		 console.log('Storage key "%s" in namespace "%s" changed. ' +
-// 			 'Old value was "%s", new value is "%s".',
-// 			 key,
-// 			 namespace,
-// 			 storageChange.oldValue,
-// 			 storageChange.newValue);
-// 	 };
-// }
+/* TESTING PURPOSES, uncomment this code block to view changes to chrome storage.
+chrome.storage.onChanged.addListener(function (changes, namespace) {
+	 for (key in changes) {
+		 var storageChange = changes[key];
+		 console.log('Storage key "%s" in namespace "%s" changed. ' +
+			 'Old value was "%s", new value is "%s".',
+			 key,
+			 namespace,
+			 storageChange.oldValue,
+			 storageChange.newValue);
+	 };
+});
+*/
