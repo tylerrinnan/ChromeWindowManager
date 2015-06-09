@@ -136,10 +136,6 @@ var getChromeStorage = function(){
 		console.log('getChromeStorage, chrome storage not available. Check manifest.json');
 	}
 };
-//
-// var repositionScreen = function(){
-// 	var width = screen
-// };
 
 /* TESTING PURPOSES, uncomment this code block to view changes to chrome storage.
 chrome.storage.onChanged.addListener(function (changes, namespace) {
