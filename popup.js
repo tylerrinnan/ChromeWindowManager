@@ -3,24 +3,53 @@ var right = 'right';
 var CWM = 'CWM';
 var leftId;
 var rightId;
-var maxWidth = 9999; // chrome will resize to its maximum limit
-var minWidth = 0; // chrome will resize to its minimum limit
 
-var resize = function (window) {
-	if(!leftId || !rightId){
-		console.log('you dont have any windows designated');
-		return;
-	}
+var resize = function (windowId) {
+	getFromStorage(CWM, function(json){
+		var leftId = json[CWM].leftId;
+		var rightId = json[CWM].rightId;
+		if(leftId && rightId){
+			if(windowId === leftId || windowId === rightId){
 
-	if(window.id === leftId){
-		chrome.windows.update(window.id, {
-			width : 900,
-			height : window.height
-		});
-	}else if(window.id === rightId){
-		console.log('would have resized right side');
-	}
+				// screen parms
+				var large = screen.width * .8;
+				var small = screen.width * .2;
+				var height = screen.height;
 
+				// scaling and offset for focus and fade windows
+				var scaleDown;
+				var focusOffset;
+				var fadeOffset;
+
+				if(windowId === leftId){
+					scaleDown = rightId;
+					focusOffset = 0;
+					fadeOffset = large;
+				}else{
+					scaleDown = leftId;
+					focusOffset = small;
+					fadeOffset = 0;
+				}
+
+				chrome.windows.update(windowId, {
+					left: focusOffset,
+					width : large,
+					height : height
+				});
+
+				chrome.windows.update(scaleDown, {
+					left: fadeOffset,
+					width : small,
+					height : height
+				});
+			}else{
+				console.log('you dont have any windows designated');
+				return;
+			}
+		}else{
+			// do something to show that left and right haven't been designated
+		}
+	});
 };
 
 var bindEventHandlers = function () {
@@ -106,7 +135,11 @@ var getChromeStorage = function(){
 	}else{
 		console.log('getChromeStorage, chrome storage not available. Check manifest.json');
 	}
-}
+};
+//
+// var repositionScreen = function(){
+// 	var width = screen
+// };
 
 /* TESTING PURPOSES, uncomment this code block to view changes to chrome storage.
 chrome.storage.onChanged.addListener(function (changes, namespace) {
