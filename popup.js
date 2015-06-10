@@ -12,8 +12,8 @@ var resize = function (windowId) {
 			if(windowId === leftId || windowId === rightId){
 
 				// screen parms
-				var large = screen.width * .8;
-				var small = screen.width * .2;
+				var large = Math.round(screen.width * .83);
+				var small = Math.round(screen.width * .17);
 				var height = screen.height;
 
 				// scaling and offset for focus and fade windows
@@ -33,12 +33,14 @@ var resize = function (windowId) {
 
 				chrome.windows.update(windowId, {
 					left: focusOffset,
+					top: 0,
 					width : large,
 					height : height
 				});
 
 				chrome.windows.update(scaleDown, {
 					left: fadeOffset,
+					top: 0,
 					width : small,
 					height : height
 				});
