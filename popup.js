@@ -1,7 +1,8 @@
 var bindEventHandlers = function () {
 	$('#orientation button').bind('click', function (event) {
 		designateOrienation(event);
-	})
+	});
+	bindSliderHandler();
 };
 
 /*
@@ -40,20 +41,23 @@ var designateOrienation = function (event) {
 		});
 };
 
+var bindSliderHandler = function(){
+	$('#width-slider').slider({
+		range: 'max',
+		min: 17,
+		max: 83,
+		value: 17,
+		slide: function( event, ui ) {
+			$('#value').text(ui.value + '%');
+			var foo = getFromStorage("WMMMMMM", function(){
+
+			});
+		}
+	});
+	$("#value").text($("#width-slider").slider("value"));
+}
+
 //bind event listeners:
 document.addEventListener('DOMContentLoaded', function () {
 	bindEventHandlers();
-
-	$(function() {
-    $( "#width-slider" ).slider({
-      range: "max",
-      min: 17,
-      max: 83,
-      value: 17,
-      slide: function( event, ui ) {
-        $('#value').text(ui.value + '%');
-      }
-    });
-    $("#value").text($("#width-slider").slider("value"));
-	});
 });

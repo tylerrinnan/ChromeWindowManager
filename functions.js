@@ -1,11 +1,12 @@
 var left = 'left';
 var right = 'right';
 var CWM = 'CWM';
-var leftId;
-var rightId;
 
 var resize = function (windowId) {
 	getFromStorage(CWM, function(json){
+		if(isEmpty(json) || !json){
+			return;
+		}
 		var leftId = json[CWM].leftId;
 		var rightId = json[CWM].rightId;
 		if(leftId && rightId){
@@ -81,6 +82,15 @@ var getChromeStorage = function(){
 		console.log('getChromeStorage, chrome storage not available. Check manifest.json');
 	}
 };
+
+function isEmpty(obj) {
+    for(var prop in obj) {
+        if(obj.hasOwnProperty(prop))
+            return false;
+    }
+
+    return true;
+}
 
 /* TESTING PURPOSES, uncomment this code block to view changes to chrome storage.
 chrome.storage.onChanged.addListener(function (changes, namespace) {
