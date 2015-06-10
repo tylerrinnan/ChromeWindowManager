@@ -9,11 +9,11 @@
     <title>Productivity Resize</title>
 	<style>
 	  #selector {
-		width: 130px;
+		width: 170px;
 	  }
 
  	  #selector h1{
-		font-size: 14px;
+		font-size: 16px;
 		font-style: bold;
 	  }
 
@@ -21,9 +21,18 @@
 		margin-bottom: 10px;
 	  }
 
-	  #selector input {
-		width: 60px;
-	  }
+    #windowSize div {
+      width: 139px;
+    }
+
+    #windowSize h3 {
+      font-size: 13px;
+    }
+
+    #width-slider {
+      margin-top: 10px;
+    }
+
     </style>
 
     <!--
@@ -32,13 +41,20 @@
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-    <script src="jquery-1.11.3.min.js"></script>
+  <script src="jquery-1.11.3.min.js"></script>
+  <link rel="stylesheet" href="jquery-ui.min.css">
+  <script src="jquery-ui.min.js"></script>
 	<script src="popup.js"></script>
 
   </head>
   <body>
     <div id="selector">
 		<h1>Configuration</h1>
+    <div id="window-size">
+      <h3 style='display:inline;'>Focused window size: </h3>
+      <span id="value"></span>
+      <div id="width-slider"></div>
+    </div>
 		<div id='orientation'>
 			<button type="button" data-orientation="left">Left</button>
 			<button type="button" data-orientation="right">Right</button>

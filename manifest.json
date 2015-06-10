@@ -10,6 +10,12 @@
     "default_popup": "popup.html",
 	"default_title": "Chrome Window Manager"
   },
+
+  "background": {
+    "scripts": ["functions.js", "events.js"],
+    "persistent": true
+  },
+
   "permissions": [
     "activeTab",
 	  "tabs",
