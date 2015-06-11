@@ -1,3 +1,5 @@
+var threshold = 81;
+
 //bind DOM event handlers
 function bindEventHandlers() {
   $('#orientation button').bind('click', function(event) {
@@ -29,7 +31,6 @@ function designateOrienation(event) {
   });
 };
 
-//slide handler for screenFocus setting
 function slideHandle() {
   get(function(){
     $('#width-slider').slider({
@@ -38,7 +39,13 @@ function slideHandle() {
       max: returnScreenMaxSize(),
       value: CWM2.screenFocus,
       slide: function(event, ui) {
-        $('#value').text(ui.value + '%');
+        var $value = $('#value');
+        $value.text(ui.value + '%');
+        if(ui.value > threshold){
+          $value.css('color', 'red');
+        }else{
+          $value.css('color', 'black');
+        }
       },
       stop: function(event, ui) {
         CWM2.screenFocus = ui.value;
