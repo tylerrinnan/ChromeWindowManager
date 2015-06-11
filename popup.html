@@ -5,21 +5,22 @@
  value "popup.html".
  -->
 <html>
-  <head>
-    <title>Productivity Resize</title>
-	<style>
-	  #selector {
-		width: 170px;
-	  }
 
- 	  #selector h1{
-		font-size: 16px;
-		font-style: bold;
-	  }
+<head>
+  <title>Productivity Resize</title>
+  <style>
+    #selector {
+      width: 170px;
+    }
 
-	  #selector div {
-		margin-bottom: 10px;
-	  }
+    #selector h1 {
+      font-size: 16px;
+      font-style: bold;
+    }
+
+    #selector div {
+      margin-bottom: 10px;
+    }
 
     #windowSize div {
       width: 139px;
@@ -32,33 +33,36 @@
     #width-slider {
       margin-top: 10px;
     }
+  </style>
 
-    </style>
-
-    <!--
+  <!--
       - JavaScript and HTML must be in separate files: see our Content Security
       - Policy documentation[1] for details and explanation.
       -
       - [1]: https://developer.chrome.com/extensions/contentSecurityPolicy
      -->
-  <script src="jquery-1.11.3.min.js"></script>
-  <link rel="stylesheet" href="jquery-ui.min.css">
-  <script src="jquery-ui.min.js"></script>
-	<script src="popup.js"></script>
+  <script src="js/jquery-1.11.3.min.js"></script>
+  <link rel="stylesheet" href="css/jquery-ui.min.css">
 
-  </head>
-  <body>
-    <div id="selector">
-		<h1>Configuration</h1>
+  <script src="js/jquery-ui.min.js"></script>
+  <script src="js/storage.js"></script>
+  <script src="js/settings.js"></script>
+  <script src="js/functions.js"></script>
+  <script src="js/popup.js"></script>
+</head>
+<body>
+  <div id="selector">
+    <h1>Configuration</h1>
     <div id="window-size">
       <h3 style='display:inline;'>Focused window size: </h3>
       <span id="value"></span>
       <div id="width-slider"></div>
     </div>
-		<div id='orientation'>
-			<button type="button" data-orientation="left">Left</button>
-			<button type="button" data-orientation="right">Right</button>
-		</div>
-	</div>
-  </body>
+    <div id='orientation'>
+      <button type="button" data-orientation="left">Left</button>
+      <button type="button" data-orientation="right">Right</button>
+    </div>
+  </div>
+</body>
+
 </html>
