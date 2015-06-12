@@ -1,0 +1,39 @@
+  body{
+    background-color: lightgrey;
+  }
+
+  #selector {
+    width: 170px;
+  }
+
+  #selector h1 {
+    font-size: 16px;
+    font-style: bold;
+  }
+
+  #selector div {
+    margin-bottom: 10px;
+  }
+
+  #windowSize div {
+    width: 139px;
+  }
+
+  #windowSize h3 {
+    font-size: 13px;
+  }
+
+  #width-slider {
+    margin-top: 10px;
+    background-color: #00C3FF;
+  }
+
+  #width-slider .ui-slider-range {
+    background: #8DE1FF;
+  }
+
+  .selected {
+    background-color: #00C3FF;
+    box-shadow: 2px 2px 3px 0px black inset;
+    color: white;
+  }

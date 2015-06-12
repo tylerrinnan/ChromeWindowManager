@@ -8,32 +8,7 @@
 
 <head>
   <title>Productivity Resize</title>
-  <style>
-    #selector {
-      width: 170px;
-    }
 
-    #selector h1 {
-      font-size: 16px;
-      font-style: bold;
-    }
-
-    #selector div {
-      margin-bottom: 10px;
-    }
-
-    #windowSize div {
-      width: 139px;
-    }
-
-    #windowSize h3 {
-      font-size: 13px;
-    }
-
-    #width-slider {
-      margin-top: 10px;
-    }
-  </style>
 
   <!--
       - JavaScript and HTML must be in separate files: see our Content Security
@@ -43,7 +18,7 @@
      -->
   <script src="js/jquery-1.11.3.min.js"></script>
   <link rel="stylesheet" href="css/jquery-ui.min.css">
-
+  <link rel="stylesheet" href="css/styles.css">
   <script src="js/jquery-ui.min.js"></script>
   <script src="js/storage.js"></script>
   <script src="js/settings.js"></script>
@@ -52,17 +27,18 @@
 </head>
 <body>
   <div id="selector">
-    <h1>Configuration</h1>
+    <div id="config">
+      <h1>Configuration</h1>
+    </div>
     <div id="window-size">
       <h3 style='display:inline;'>Focused window size: </h3>
       <span id="value"></span>
       <div id="width-slider"></div>
     </div>
     <div id='orientation'>
-      <button type="button" data-orientation="left">Left</button>
-      <button type="button" data-orientation="right">Right</button>
+      <button id="left" type="button" data-orientation="left">Left</button>
+      <button id="right" type="button" data-orientation="right">Right</button>
     </div>
   </div>
 </body>
-
 </html>
