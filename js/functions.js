@@ -6,7 +6,7 @@ function resize(windowId) {
           // screen parms
           var large = Math.round(screen.width * getFocusScreenSize());
           var small = Math.round(screen.width * getFadeScreenSize());
-          var height = getScreenHeight()
+          var height = getScreenHeight();
 
           // scaling and offset for focus and fade windows
           var scaleDown;
@@ -50,32 +50,31 @@ function resize(windowId) {
 //---SCREEN FUNCTIONS------///
 //////////////////////////////
 
-function returnScreenMaxSize() {
-  //TODO: read screen and return best max size for viable ratio
-  //for now just return static 87 percent value
-  return 83;
+//gets the max size the chrome window can be while on screen with paired window;
+function getMaxScreenSize() {
+  return 100 - getMinScreenSize();
 };
 
-function returnScreenMinSize() {
-  //TODO
-  return 17;
+//assumes the max allowed chrome window size is 400px;
+//gets the minimum allowable size in pixels the chrome window can be;
+function getMinScreenSize() {
+  return Math.floor(400/screen.width * 100);
 }
 
-//return value in decimal format e.g. screen focus value of 87 will be .87
+//return value in decimal format e.g. screen focus value of 87 will be .87;
 function getFocusScreenSize() {
   return CWM2.screenFocus / 100;
 }
 
-//return value in decimal format of remainder of screen real-estate after
-//subtracting from 100 percent
+//return value in decimal format of remainder of screen real-estate after;
+//subtracting from 100 percent;
 function getFadeScreenSize() {
   return (100 - CWM2.screenFocus) / 100;
 }
 
+//gets the screen height and factors in window frame size;
 function getScreenHeight() {
-  //TODO: return screen height
-  //make sure to factor in OS taskbar, etc.
-  return screen.height;
+  return screen.availHeight + 6;
 }
 
 
