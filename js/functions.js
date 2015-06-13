@@ -1,47 +1,49 @@
 function resize(windowId) {
   get(function() {
-      if (CWM2.leftId && CWM2.rightId) {
-        if (windowId === CWM2.leftId || windowId === CWM2.rightId) {
+    if(CWM2.active){
+        if (CWM2.leftId && CWM2.rightId) {
+          if (windowId === CWM2.leftId || windowId === CWM2.rightId) {
 
-          // screen parms
-          var large = Math.round(screen.width * getFocusScreenSize());
-          var small = Math.round(screen.width * getFadeScreenSize());
-          var height = getScreenHeight();
+            // screen parms
+            var large = Math.round(screen.width * getFocusScreenSize());
+            var small = Math.round(screen.width * getFadeScreenSize());
+            var height = getScreenHeight();
 
-          // scaling and offset for focus and fade windows
-          var scaleDown;
-          var focusOffset;
-          var fadeOffset;
+            // scaling and offset for focus and fade windows
+            var scaleDown;
+            var focusOffset;
+            var fadeOffset;
 
-          if (windowId === CWM2.leftId) {
-            scaleDown = CWM2.rightId;
-            focusOffset = 0;
-            fadeOffset = large;
+            if (windowId === CWM2.leftId) {
+              scaleDown = CWM2.rightId;
+              focusOffset = 0;
+              fadeOffset = large;
+            } else {
+              scaleDown = CWM2.leftId;
+              focusOffset = small;
+              fadeOffset = 0;
+            }
+
+            chrome.windows.update(windowId, {
+              left: focusOffset,
+              top: 0,
+              width: large,
+              height: height
+            });
+
+            chrome.windows.update(scaleDown, {
+              left: fadeOffset,
+              top: 0,
+              width: small,
+              height: height
+            });
           } else {
-            scaleDown = CWM2.leftId;
-            focusOffset = small;
-            fadeOffset = 0;
+            return;
           }
-
-          chrome.windows.update(windowId, {
-            left: focusOffset,
-            top: 0,
-            width: large,
-            height: height
-          });
-
-          chrome.windows.update(scaleDown, {
-            left: fadeOffset,
-            top: 0,
-            width: small,
-            height: height
-          });
         } else {
-          return;
+          // do something to show that left and right haven't been designated
         }
-      } else {
-        // do something to show that left and right haven't been designated
-      }
+    }
   });
 };
 

@@ -2,7 +2,8 @@
 var CWM2 = {
   leftId: null,
   rightId: null,
-  screenFocus: 83
+  screenFocus: 50,
+  active: true
 };
 
 //get CWM object from storage and set to model
@@ -13,6 +14,7 @@ function get(callback) {
       CWM2.leftId = deets.leftId;
       CWM2.rightId = deets.rightId;
       CWM2.screenFocus = deets.screenFocus;
+      CWM2.active = deets.active;
       if(callback)
       callback();
     }
