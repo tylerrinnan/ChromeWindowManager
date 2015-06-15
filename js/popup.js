@@ -1,5 +1,3 @@
-var threshold = 81;
-
 //bind DOM event handlers
 function bindEventHandlers() {
   $('#orientation button').bind('click', function(event) {
@@ -50,15 +48,16 @@ function style(){
 
 function slideHandle() {
   get(function(){
+    var overload = 3; //perecentage to overload width
     $('#width-slider').slider({
       range: 'max',
       min: returnScreenMinSize(),
-      max: returnScreenMaxSize(),
+      max: returnScreenMaxSize() + overload,
       value: CWM2.screenFocus,
       slide: function(event, ui) {
         var $value = $('#value');
         $value.text(ui.value + '%');
-        if(ui.value > threshold){
+        if(ui.value > returnScreenMaxSize()){
           $value.css('color', 'red');
         }else{
           $value.css('color', 'black');
@@ -72,6 +71,12 @@ function slideHandle() {
         });
       }
     });
-    $('#value').text($('#width-slider').slider('value') + '%');
+    var $value = $('#value');
+    $value.text($('#width-slider').slider('value') + '%');
+    if($('#width-slider').slider('value') > returnScreenMaxSize()){
+      $value.css('color', 'red');
+    }else{
+      $value.css('color', 'black');
+    }
   });
 };
